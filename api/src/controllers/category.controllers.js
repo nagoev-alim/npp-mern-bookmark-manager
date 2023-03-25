@@ -17,7 +17,7 @@ const categoryControllers = {
         return res.status(httpCodes.BAD_REQUEST.code).json({ message: error.details[0].message });
       }
       // Find field
-      const existingDoc = await Model.findOne({ title: req.body.title.toLowerCase() });
+      const existingDoc = await Model.findOne({ title: req.body.title.toLowerCase(), userId: req.user });
       if (existingDoc) {
         return res.status(httpCodes.BAD_REQUEST.code).json({ message: 'Category already exists' });
       }
