@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { IoSearch } from 'react-icons/all.js';
 /* =============================
 📦 Custom Imports
 ============================= */
@@ -21,14 +22,8 @@ export default function DashboardPage() {
   const { user } = useSelector(userSelector);
   const [toggleModal, setToggleModal] = useState(false);
   const [type, setType] = useState(null);
+  const [search, setSearch] = useState('');
   const { entries: categories, error, message } = useSelector(categoriesSelector);
-  /* =============================
-  📦 Section - Methods:
-  ============================= */
-  const onCreateCategory = (type) => {
-    setType(type);
-    setToggleModal(true);
-  };
   /* =============================
   📦 Section - Side Effects:
   ============================= */
@@ -40,6 +35,18 @@ export default function DashboardPage() {
     dispatch(API_CATEGORIES.GET())
       .then(() => dispatch(resetCategoriesState()));
   }, [dispatch, error, message]);
+  /* =============================
+  📦 Section - Methods:
+  ============================= */
+  // Create a new category/bookmark
+  const onCreateCategory = (type) => {
+    setType(type);
+    setToggleModal(true);
+  };
+  // Search for bookmarks
+  const onSearch = ({ target: { value } }) => {
+    setSearch(value);
+  };
   /* =============================
   📦 Section - Rendering:
   ============================= */
@@ -54,6 +61,14 @@ export default function DashboardPage() {
         Add Bookmark
       </button>
     </div>
+    {/* Search */}
+    <label className='form-group'>
+      <span className='form-label flex flex-wrap items-center gap-1 font-bold text-xl'>
+        <IoSearch size={25} /> Search
+      </span>
+      <input className='input font-medium' value={search} onChange={onSearch} type='text'
+             placeholder='Search bookmark' />
+    </label>
     {/* Modal */}
     <Modal type={type} categories={categories} toggleModal={toggleModal}
            toggleModalWindow={(reset) => {
@@ -63,6 +78,6 @@ export default function DashboardPage() {
     />
     {/* Lists */}
     <CategoryList />
-    <BookmarkList categories={categories} />
+    <BookmarkList categories={categories} search={search} setSearch={setSearch} />
   </div>;
 }

@@ -24,6 +24,6 @@ export default function App() {
           <Routes />
         </Suspense>
       </Layout>
-      <Toaster position='top-right' />
+      <Toaster position='bottom-center' containerClassName='font-sans font-medium' />
     </Router>;
 }
